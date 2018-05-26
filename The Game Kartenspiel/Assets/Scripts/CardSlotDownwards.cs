@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine.EventSystems;
 using TheGameNameSpace;
 
-public class CardSlotDownwards: CardSlotBase, IDropHandler {
-
+public class CardSlotDownwards : CardSlotBase, IDropHandler
+{
     private static int currentSlotNumber;
     public static bool hasCardPlaced = false;
-    public CardSlotHandCards handCardSlot;
     public EndTurnPanelController endTurnPanelController;
 
     public void OnDrop(PointerEventData eventData)
@@ -30,9 +25,9 @@ public class CardSlotDownwards: CardSlotBase, IDropHandler {
             CardHandler.DisableDragHandler(draggedCard, cardInSlot);
             DragHandler.draggedCard.transform.SetParent(transform);
 
-            //handCardSlot.UpdateHandCards();
+            GameCore.cardsDropped++;
 
-            if (GameCore.numberOfHandCards - handCardSlot.GetCardAmountInSlot(handCardSlot.transform) >= 2)
+            if (GameCore.cardsDropped >= 2)
             {
                 endTurnPanelController.SetEndTurnButton(true);
             }

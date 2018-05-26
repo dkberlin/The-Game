@@ -39,9 +39,9 @@ public class CardSlotHandCards : CardSlotBase
         }
     }
 
-    internal List<CardBase> LoadHandCardsForActivePlayer(int currentPlayer)
-    {
-        //currentHandCards.Clear();
-        return GameCore.LoadHandCardsForPlayer(currentPlayer);
-    }
+    //internal List<CardBase> LoadHandCardsForActivePlayer(int currentPlayer)
+    //{
+    //    //currentHandCards.Clear();
+    //    return GameCore.LoadHandCardsForPlayer(currentPlayer);
+    //}
 }

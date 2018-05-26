@@ -196,6 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handCardSlot: {fileID: 1432674955}
   endTurnPanelController: {fileID: 1578057111}
+  cardHandler: {fileID: 636957625}
 --- !u!114 &58114097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1082,6 +1083,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handCardSlot: {fileID: 1432674955}
   endTurnPanelController: {fileID: 1578057111}
+  cardHandler: {fileID: 636957625}
 --- !u!114 &894302863
 MonoBehaviour:
   m_ObjectHideFlags: 0

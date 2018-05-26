@@ -8,30 +8,32 @@ public class EndTurnButton : MonoBehaviour
 {
     public void OnClick()
     {
-        var handCardSlot = FindObjectOfType<CardSlotHandCards>();
+        //var handCardSlot = FindObjectOfType<CardSlotHandCards>();
+        int currentPlayerNumber = GameCore.currentPlayer == 1 ? 1 : 2;
+        var currentPlayer = currentPlayerNumber == 1 ? GameCore.player1 : GameCore.player2;
 
+        var handCardSlot = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
 
         if (handCardSlot != null)
         {
             if (GameCore.numberOfPlayers == 2)
             {
-                int currentPlayer = GameCore.currentPlayer == 1 ? 1 : 2;
 
                 RefillHandCards(handCardSlot);
                 handCardSlot.UpdateHandCards();
-                SaveHandCardsForCurrentPlayer(handCardSlot, currentPlayer);
+                //SaveHandCardsForCurrentPlayer(handCardSlot, currentPlayer);
                 //handCardSlot.currentHandCards.Clear();
                 //handCardSlot.ClearAllHandCards();
 
-                GameCore.currentPlayer = currentPlayer == 1 ? 2 : 1;
-                if (GameCore.LoadHandCardsForPlayer(currentPlayer).Count == 0)
-                {
-                    RefillHandCards(handCardSlot);
-                }
-                else
-                {
-                    GameCore.LoadHandCardsForPlayer(currentPlayer);
-                }
+                GameCore.SetCurrentPlayerHandCardsVisible();
+                //if (GameCore.LoadHandCardsForPlayer(currentPlayer).Count == 0)
+                //{
+                //    RefillHandCards(handCardSlot);
+                //}
+                //else
+                //{
+                //    GameCore.LoadHandCardsForPlayer(currentPlayer);
+                //}
             }
             else
             {
@@ -41,13 +43,14 @@ public class EndTurnButton : MonoBehaviour
         }
 
         var buttonPanel = FindObjectOfType<EndTurnPanelController>();
+        GameCore.cardsDropped = 0;
         buttonPanel.SetEndTurnButton(false);
     }
 
-    private void SaveHandCardsForCurrentPlayer(CardSlotHandCards handCardSlot, int currentPlayer)
-    {
-        GameCore.SaveHandCardsForPlayer(currentPlayer, handCardSlot);
-    }
+    //private void SaveHandCardsForCurrentPlayer(CardSlotHandCards handCardSlot, int currentPlayer)
+    //{
+    //    GameCore.SaveHandCardsForPlayer(currentPlayer, handCardSlot);
+    //}
 
     private void RefillHandCards(CardSlotHandCards handCardSlot)
     {

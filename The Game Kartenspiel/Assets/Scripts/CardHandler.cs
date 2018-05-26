@@ -24,34 +24,22 @@ public class CardHandler : MonoBehaviour {
         //RefillHandCards(usedHandCards);
         if (GameCore.numberOfPlayers == 2)
         {
-            var players = FindObjectsOfType<Player>();
-            foreach (var player in players)
-            {
-                if (player.playerNumber == 2)
-                {
-                    player2 = player;
-                }
-
-                if (player.playerNumber == 1)
-                {
-                    player1 = player;
-                }
-            }
+            player2 = GameCore.player2;
             cardSlotHandCardsPlayer2.gameObject.SetActive(true);
             DrawFirstCards(2);
         }
-        
-        if (player1 == null)
-        {
-            player1 = FindObjectOfType<Player>();
-        }
 
+        player1 = GameCore.player1;
         DrawFirstCards(1);
     }
 
     public void DrawFirstCards(int playerNumber)
     {
         RefillHandCards(GameCore.numberOfHandCards, playerNumber);
+        if (GameCore.numberOfPlayers == 2)
+        {
+            GameCore.SetCurrentPlayerHandCardsVisible();
+        }
     }
 
     public void RefillHandCards(int cardAmountToRefill, int playerNumber)
@@ -69,13 +57,14 @@ public class CardHandler : MonoBehaviour {
             if (playerNumber == 1)
             {
                 cardSlotHandCardsPlayer1.currentHandCards.Add(card);
-                card.transform.SetParent(cardSlotHandCardsPlayer1.transform);   
-                 
+                card.transform.SetParent(cardSlotHandCardsPlayer1.transform);
+                player1.savedHandCards.Add(card);
             }
             else
             {
                 cardSlotHandCardsPlayer2.currentHandCards.Add(card);
                 card.transform.SetParent(cardSlotHandCardsPlayer2.transform);
+                player2.savedHandCards.Add(card);
             }
             //cardSlotHandCards.currentHandCards.Add(card);
       
