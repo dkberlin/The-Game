@@ -14,7 +14,7 @@ public class CardSlotBase : MonoBehaviour
 
     public CardBase _cardInSlot(Transform givenTransform)
     {
-        //int numbersOfCardsInSlot = GetCardAmountInSlot(givenTransform);
+        numberOfCardsInSlot = GetCardAmountInSlot(givenTransform);
         if (numberOfCardsInSlot > 0)
         {
             CardBase cardInSlot = transform.GetChild(numberOfCardsInSlot-1).gameObject.GetComponent<CardBase>();

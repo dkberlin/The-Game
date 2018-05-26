@@ -19,8 +19,8 @@ namespace TheGameNameSpace
         public List<GameObject> listOfPlayers;
         public static List<GameObject> internalListOfPlayers = new List<GameObject>();
 
-        private CardSlotHandCards playerOneHandCards;
-        private CardSlotHandCards playerTwoHandCards;
+        private static CardSlotHandCards playerOneHandCards;
+        private static CardSlotHandCards playerTwoHandCards;
 
 
         void Start () {
@@ -74,9 +74,9 @@ namespace TheGameNameSpace
             return cardList;
         }
 
-        public void CheckGameConditions()
+        public static void CheckGameConditions()
         {
-            //CardSlotHandCards.
+            Debug.Log(playerOneHandCards.currentHandCards[0]._cardNumber);
         }
     }
 }

@@ -8,12 +8,14 @@ using TheGameNameSpace;
 
 public class CardHandler : MonoBehaviour {
 
-    public UnityEngine.Object playerCard;
+    //public UnityEngine.Object playerCard;
+    public CardBase playerCard;
     //public List<UnityEngine.Object> playerHandCards;
     //public Transform handCardPanel;
     public CardSlotHandCards cardSlotHandCardsPlayer1;
     public CardSlotHandCards cardSlotHandCardsPlayer2;
-
+    private Player player1;
+    private Player player2;
 
     public void OnGameStart()
     {
@@ -22,8 +24,26 @@ public class CardHandler : MonoBehaviour {
         //RefillHandCards(usedHandCards);
         if (GameCore.numberOfPlayers == 2)
         {
+            var players = FindObjectsOfType<Player>();
+            foreach (var player in players)
+            {
+                if (player.playerNumber == 2)
+                {
+                    player2 = player;
+                }
+
+                if (player.playerNumber == 1)
+                {
+                    player1 = player;
+                }
+            }
             cardSlotHandCardsPlayer2.gameObject.SetActive(true);
             DrawFirstCards(2);
+        }
+        
+        if (player1 == null)
+        {
+            player1 = FindObjectOfType<Player>();
         }
 
         DrawFirstCards(1);
@@ -38,8 +58,8 @@ public class CardHandler : MonoBehaviour {
     {
         for (int i = 0; i < cardAmountToRefill; i++)
         {
-            
-            var card = Instantiate(playerCard) as GameObject;
+
+            var card = Instantiate(playerCard);
             int cardNumber = card.GetComponent<CardBase>()._cardNumber;
             var cardTextComponent = card.GetComponentInChildren<Text>();
             var bigCardNumber = card.transform.Find("CardNumber").GetComponent<Text>();
@@ -49,7 +69,8 @@ public class CardHandler : MonoBehaviour {
             if (playerNumber == 1)
             {
                 cardSlotHandCardsPlayer1.currentHandCards.Add(card);
-                card.transform.SetParent(cardSlotHandCardsPlayer1.transform);    
+                card.transform.SetParent(cardSlotHandCardsPlayer1.transform);   
+                 
             }
             else
             {

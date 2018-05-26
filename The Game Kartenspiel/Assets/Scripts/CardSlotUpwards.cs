@@ -39,5 +39,6 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
                 endTurnPanelController.SetEndTurnButton(true);
             }
         }
+        GameCore.CheckGameConditions();
     }
 }

@@ -747,7 +747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2c9291f12beb740b94856a98fc1512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCard: {fileID: 1018989369949516, guid: a9b0a1084a829f24e9d05df7efdc7d50, type: 2}
+  playerCard: {fileID: 114736711179705782, guid: a9b0a1084a829f24e9d05df7efdc7d50,
+    type: 2}
   cardSlotHandCardsPlayer1: {fileID: 1432674955}
   cardSlotHandCardsPlayer2: {fileID: 2018252098}
 --- !u!4 &636957626
