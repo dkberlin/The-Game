@@ -235,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Player.cs" />
+    <Compile Include="Assets\ReturnToMainMenu.cs" />
     <Compile Include="Assets\Scripts\CardBase.cs" />
     <Compile Include="Assets\Scripts\CardHandler.cs" />
     <Compile Include="Assets\Scripts\CardSlotBase.cs" />
@@ -246,6 +247,8 @@
     <Compile Include="Assets\Scripts\EndTurnPanelController.cs" />
     <Compile Include="Assets\Scripts\GameCore.cs" />
     <Compile Include="Assets\Scripts\PlayerChoiceButton.cs" />
+    <Compile Include="Assets\ShowCurrentPlayerNumber.cs" />
+    <Compile Include="Assets\WinOrLoseText.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

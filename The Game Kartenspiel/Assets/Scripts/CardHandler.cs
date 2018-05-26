@@ -8,10 +8,7 @@ using TheGameNameSpace;
 
 public class CardHandler : MonoBehaviour {
 
-    //public UnityEngine.Object playerCard;
     public CardBase playerCard;
-    //public List<UnityEngine.Object> playerHandCards;
-    //public Transform handCardPanel;
     public CardSlotHandCards cardSlotHandCardsPlayer1;
     public CardSlotHandCards cardSlotHandCardsPlayer2;
     private Player player1;
@@ -19,9 +16,6 @@ public class CardHandler : MonoBehaviour {
 
     public void OnGameStart()
     {
-        //int usedHandCards = GameCore.numberOfHandCards;
-
-        //RefillHandCards(usedHandCards);
         if (GameCore.numberOfPlayers == 2)
         {
             player2 = GameCore.player2;
@@ -38,7 +32,7 @@ public class CardHandler : MonoBehaviour {
         RefillHandCards(GameCore.numberOfHandCards, playerNumber);
         if (GameCore.numberOfPlayers == 2)
         {
-            GameCore.SetCurrentPlayerHandCardsVisible();
+            GameCore.SetPlayerHandCardsNonVisible(2);
         }
     }
 
@@ -46,14 +40,12 @@ public class CardHandler : MonoBehaviour {
     {
         for (int i = 0; i < cardAmountToRefill; i++)
         {
-
             var card = Instantiate(playerCard);
             int cardNumber = card.GetComponent<CardBase>()._cardNumber;
             var cardTextComponent = card.GetComponentInChildren<Text>();
             var bigCardNumber = card.transform.Find("CardNumber").GetComponent<Text>();
             var smallCardNumber = card.transform.Find("CardNumberSmall").GetComponent<Text>();
 
-            //playerHandCards[i] = card;
             if (playerNumber == 1)
             {
                 cardSlotHandCardsPlayer1.currentHandCards.Add(card);
@@ -66,7 +58,6 @@ public class CardHandler : MonoBehaviour {
                 card.transform.SetParent(cardSlotHandCardsPlayer2.transform);
                 player2.savedHandCards.Add(card);
             }
-            //cardSlotHandCards.currentHandCards.Add(card);
       
             if (bigCardNumber != null && smallCardNumber != null)
             {

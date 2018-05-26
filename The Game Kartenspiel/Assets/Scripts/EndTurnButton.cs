@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TheGameNameSpace;
 using System;
+using UnityEngine.SceneManagement;
 
 public class EndTurnButton : MonoBehaviour
 {
     public void OnClick()
     {
-        //var handCardSlot = FindObjectOfType<CardSlotHandCards>();
         int currentPlayerNumber = GameCore.currentPlayer == 1 ? 1 : 2;
         var currentPlayer = currentPlayerNumber == 1 ? GameCore.player1 : GameCore.player2;
+        int nextPlayer = currentPlayerNumber == 1 ? 2 : 1;
+
 
         var handCardSlot = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
 
@@ -18,22 +20,10 @@ public class EndTurnButton : MonoBehaviour
         {
             if (GameCore.numberOfPlayers == 2)
             {
-
                 RefillHandCards(handCardSlot);
                 handCardSlot.UpdateHandCards();
-                //SaveHandCardsForCurrentPlayer(handCardSlot, currentPlayer);
-                //handCardSlot.currentHandCards.Clear();
-                //handCardSlot.ClearAllHandCards();
 
-                GameCore.SetCurrentPlayerHandCardsVisible();
-                //if (GameCore.LoadHandCardsForPlayer(currentPlayer).Count == 0)
-                //{
-                //    RefillHandCards(handCardSlot);
-                //}
-                //else
-                //{
-                //    GameCore.LoadHandCardsForPlayer(currentPlayer);
-                //}
+                GameCore.SetPlayerHandCardsNonVisible(currentPlayerNumber);
             }
             else
             {
@@ -44,13 +34,20 @@ public class EndTurnButton : MonoBehaviour
 
         var buttonPanel = FindObjectOfType<EndTurnPanelController>();
         GameCore.cardsDropped = 0;
-        buttonPanel.SetEndTurnButton(false);
-    }
 
-    //private void SaveHandCardsForCurrentPlayer(CardSlotHandCards handCardSlot, int currentPlayer)
-    //{
-    //    GameCore.SaveHandCardsForPlayer(currentPlayer, handCardSlot);
-    //}
+        if (GameCore.numberOfPlayers == 2)
+        {
+            GameCore.playerNumberUIElement.SetPlayerNumber(nextPlayer);
+            GameCore.currentPlayer = nextPlayer;
+        }
+
+        buttonPanel.SetEndTurnButton(false);
+        if (!GameCore.CanStillWinTheGame())
+        {
+            Debug.Log("Game Over!");
+            SceneManager.LoadScene("GameOverScene");
+        }
+    }
 
     private void RefillHandCards(CardSlotHandCards handCardSlot)
     {

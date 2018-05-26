@@ -24,8 +24,17 @@ namespace TheGameNameSpace
 
         public static CardSlotHandCards cardSlotPlayer1;
         public static CardSlotHandCards cardSlotPlayer2;
+        private static CardSlotHandCards activeHandCardSlot;
 
         public static int cardsDropped = 0;
+
+        private static CardSlotUpwards[] upwardCards;
+        private static CardSlotDownwards[] downwardCards;
+
+        public static ShowCurrentPlayerNumber playerNumberUIElement;
+
+        public static bool lostTheGame = false;
+
 
 
         void Start () {
@@ -33,6 +42,12 @@ namespace TheGameNameSpace
             {
                 InstantiatePlayers(i +1);
             }
+
+            upwardCards = FindObjectsOfType<CardSlotUpwards>();
+            downwardCards = FindObjectsOfType<CardSlotDownwards>();
+
+            playerNumberUIElement = FindObjectOfType<ShowCurrentPlayerNumber>();
+
 
             if (numberOfPlayers == 2)
             {
@@ -49,6 +64,7 @@ namespace TheGameNameSpace
                         player1 = player;
                     }
 
+                    cardSlotPlayer1 = cardHandler.cardSlotHandCardsPlayer1;
                     cardSlotPlayer2 = cardHandler.cardSlotHandCardsPlayer2;
 
                 }
@@ -57,9 +73,9 @@ namespace TheGameNameSpace
             if (player1 == null)
             {
                 player1 = FindObjectOfType<Player>();
+                cardSlotPlayer1 = cardHandler.cardSlotHandCardsPlayer1;
+                activeHandCardSlot = cardSlotPlayer1;
             }
-
-            cardSlotPlayer1 = cardHandler.cardSlotHandCardsPlayer1;
 
             cardHandler.OnGameStart();
 	    }
@@ -76,19 +92,19 @@ namespace TheGameNameSpace
             }
         }
 
-        internal static void SetCurrentPlayerHandCardsVisible()
+        internal static void SetPlayerHandCardsNonVisible(int playerNumber)
         {
-            var playerToSwitchOffHandCards = currentPlayer == 1 ? player2 : player1;
-            
-            if (playerToSwitchOffHandCards.playerNumber == 2)
+            if (playerNumber == 2)
             {
                 cardSlotPlayer2.gameObject.SetActive(false);
                 cardSlotPlayer1.gameObject.SetActive(true);
+                activeHandCardSlot = cardSlotPlayer1;
             }
             else
             {
                 cardSlotPlayer1.gameObject.SetActive(false);
                 cardSlotPlayer2.gameObject.SetActive(true);
+                activeHandCardSlot = cardSlotPlayer2;
             }
         }
 
@@ -103,41 +119,39 @@ namespace TheGameNameSpace
             listOfPlayers.Add(newPlayer);
         }
 
-        //public static void SaveHandCardsForPlayer(int currentPlayer, CardSlotHandCards handCardSlot)
-        //{
-        //    //foreach (var player in internalListOfPlayers)
-        //    //{
-        //    //    var playerInfo = player.GetComponent<Player>();
-
-        //    //    if (playerInfo.playerNumber == currentPlayer)
-        //    //    {
-        //    //        foreach(var card in handCardSlot.currentHandCards)
-        //    //        {
-        //    //            playerInfo.savedHandCards.Add(card.GetComponent<CardBase>());
-        //    //        }
-        //    //    }
-        //    //}
-
-        //    var playerToUpdate = currentPlayer == 1 ? player1 : player2;
-
-        //    playerToUpdate.savedHandCards.Clear();
-
-        //    foreach (var card in handCardSlot.currentHandCards)
-        //    {
-        //        playerToUpdate.savedHandCards.Add(card);
-        //    }
-        //}
-
-        //public static List<CardBase> LoadHandCardsForPlayer(int currentPlayer)
-        //{
-        //    var cardList = internalListOfPlayers[currentPlayer].GetComponent<Player>().savedHandCards;
-
-        //    return cardList;
-        //}
-
-        public static void CheckGameConditions()
+        public static bool CanStillWinTheGame()
         {
-            Debug.Log(player1.savedHandCards[0]._cardNumber);
+            bool downwardCardToPlace = false;
+            bool upwardCardToPlace = false;
+
+            foreach (var card in activeHandCardSlot.currentHandCards)
+            {
+                foreach (var slot in downwardCards)
+                {
+                    int slotNumber = slot.GetNumberOfCardInSlot(slot);
+                    if (card._cardNumber < slotNumber)
+                    {
+                        downwardCardToPlace = true;
+                    }
+                }
+
+                foreach (var slot in upwardCards)
+                {
+                    int slotnumber = slot.GetNumberOfCardInSlot(slot);
+                    if (card._cardNumber > slotnumber)
+                    {
+                        upwardCardToPlace = true;
+                    }
+                }
+            }
+
+            if (!downwardCardToPlace && !upwardCardToPlace)
+            {
+                return false;
+                lostTheGame = true;
+            }
+
+            return true;
         }
     }
 }

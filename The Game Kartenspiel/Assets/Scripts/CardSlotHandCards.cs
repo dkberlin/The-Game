@@ -6,7 +6,6 @@ using TheGameNameSpace;
 
 public class CardSlotHandCards : CardSlotBase
 {
-    //public List<GameObject> currentHandCards;
     public List<CardBase> currentHandCards;
 
     public override int GetCardAmountInSlot(Transform givenTransform)
@@ -27,21 +26,4 @@ public class CardSlotHandCards : CardSlotBase
             }
         }
     }
-
-    public void ClearAllHandCards()
-    {
-        currentHandCards.Clear();
-
-        Transform[] childElements = transform.GetComponentsInChildren<Transform>();
-        foreach (var entry in childElements)
-        {
-            //Destroy(entry.gameObject);
-        }
-    }
-
-    //internal List<CardBase> LoadHandCardsForActivePlayer(int currentPlayer)
-    //{
-    //    //currentHandCards.Clear();
-    //    return GameCore.LoadHandCardsForPlayer(currentPlayer);
-    //}
 }
