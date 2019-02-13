@@ -43,19 +43,21 @@ public class CardHandler : MonoBehaviour {
             var card = Instantiate(playerCard);
             int cardNumber = card.GetComponent<CardBase>()._cardNumber;
             var cardTextComponent = card.GetComponentInChildren<Text>();
-            var bigCardNumber = card.transform.Find("CardNumber").GetComponent<Text>();
-            var smallCardNumber = card.transform.Find("CardNumberSmall").GetComponent<Text>();
+            var bigCardNumber = card.bigNumber;
+            var smallCardNumber = card.smallNumber;
 
             if (playerNumber == 1)
             {
                 cardSlotHandCardsPlayer1.currentHandCards.Add(card);
                 card.transform.SetParent(cardSlotHandCardsPlayer1.transform);
+                card.transform.localScale = new Vector3(1,1,1);
                 player1.savedHandCards.Add(card);
             }
             else
             {
                 cardSlotHandCardsPlayer2.currentHandCards.Add(card);
                 card.transform.SetParent(cardSlotHandCardsPlayer2.transform);
+                card.transform.localScale = new Vector3(1,1,1);
                 player2.savedHandCards.Add(card);
             }
       
@@ -79,6 +81,17 @@ public class CardHandler : MonoBehaviour {
         if (cardInSlot != null)
         {
             cardInSlot.GetComponent<DragHandler>().enabled = false;
+        }
+    }
+    
+    public static void EnableDragHandler(CardBase draggedCard, CardBase cardInSlot = null)
+    {
+        draggedCard.GetComponent<DragHandler>().enabled = true;
+        draggedCard.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+        if (cardInSlot != null)
+        {
+            cardInSlot.GetComponent<DragHandler>().enabled = true;
         }
     }
 }

@@ -2,39 +2,50 @@
 using TheGameNameSpace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CardSlotUpwards : CardSlotBase, IDropHandler
 {
     public static int currentSlotNumber = 0;
     public static bool hasCardPlaced = false;
     public EndTurnPanelController endTurnPanelController;
+    public Button validationButton;
+    public Button declineButton;
+    
+    private CardBase _currentDraggedCard;
+    private CardBase _cardInPlace;
+    private CardSlotHandCards _currentPlayerHandCards;
 
     public void OnDrop(PointerEventData eventData)
     {
-        var draggedCard = DragHandler.draggedCard;
-        int cardNumber = draggedCard._cardNumber;
-        var cardInSlot = _cardInSlot(transform);
+        _currentDraggedCard = DragHandler.draggedCard;
+        int cardNumber = _currentDraggedCard._cardNumber;
+//        var cardInSlot = _cardInSlot(transform);
+        _cardInPlace = _cardInSlot(transform);
 
-        currentSlotNumber = cardInSlot ? cardInSlot._cardNumber : 200;
-        hasCardPlaced = cardInSlot ? true : false;
+        currentSlotNumber = _cardInPlace ? _cardInPlace._cardNumber : 200;
+        hasCardPlaced = _cardInPlace ? true : false;
 
-        if (!cardInSlot || cardNumber > currentSlotNumber || currentSlotNumber - 10 == cardNumber)
+        if (!_cardInPlace || cardNumber > currentSlotNumber || currentSlotNumber - 10 == cardNumber)
         {
-            if (hasCardPlaced)
-            {
-                _cardInSlot(transform).gameObject.SetActive(false);
-            }
-            CardHandler.DisableDragHandler(draggedCard, cardInSlot);
-            DragHandler.draggedCard.transform.SetParent(transform);
+            ActivateChoiceButtons();
+//            if (hasCardPlaced)
+//            {
+//                _cardInSlot(transform).gameObject.SetActive(false);
+//            }
+            CardHandler.DisableDragHandler(_currentDraggedCard, _cardInPlace);
+            _currentDraggedCard.transform.SetParent(transform);
+            _currentDraggedCard.transform.localPosition = new Vector3(0,0,0);
+            
 
             var currentPlayerNumber = GameCore.currentPlayer;
             var currentPlayer = currentPlayerNumber == 1 ? GameCore.player1 : GameCore.player2;
 
-            var playersHandCards = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
-            playersHandCards.currentHandCards.Remove(draggedCard);
-            CheckIfGameWon(playersHandCards.currentHandCards.Count);
+            _currentPlayerHandCards = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
+            _currentPlayerHandCards.currentHandCards.Remove(_currentDraggedCard);
+            CheckIfGameWon(_currentPlayerHandCards.currentHandCards.Count);
 
-            GameCore.cardsDropped++;
+//            GameCore.cardsDropped++;
 
             if (GameCore.cardsDropped == 1 && !GameCore.CanStillWinTheGame())
             {
@@ -42,10 +53,49 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
                 SceneManager.LoadScene("GameOverScene");
             }
 
-            if (GameCore.cardsDropped >= 2)
-            {
-                endTurnPanelController.SetEndTurnButton(true);
-            }
+//            if (GameCore.cardsDropped >= 2)
+//            {
+//                endTurnPanelController.SetEndTurnButton(true);
+//            }
+        }
+    }
+
+    private void ActivateChoiceButtons()
+    {
+        validationButton.transform.gameObject.SetActive(true);
+        validationButton.onClick.AddListener(OnValidationClicked);
+        declineButton.transform.gameObject.SetActive(true);
+        declineButton.onClick.AddListener(OnDeclineClicked);
+    }
+    
+    private void DeactivateChoiceButtons()
+    {
+        validationButton.transform.gameObject.SetActive(false);
+        validationButton.onClick.RemoveListener(OnValidationClicked);
+        declineButton.transform.gameObject.SetActive(false);
+        declineButton.onClick.RemoveListener(OnDeclineClicked);
+    }
+
+    private void OnDeclineClicked()
+    {
+        CardHandler.EnableDragHandler(_currentDraggedCard, _cardInPlace);
+        DragHandler.draggedCard.transform.SetParent(_currentPlayerHandCards.transform);
+        DeactivateChoiceButtons();
+    }
+
+    private void OnValidationClicked()
+    {
+        if (hasCardPlaced)
+        {
+            _cardInPlace.transform.gameObject.SetActive(false);
+        }
+        
+        GameCore.cardsDropped++;
+        DeactivateChoiceButtons();
+        
+        if (GameCore.cardsDropped >= 2)
+        {
+            endTurnPanelController.SetEndTurnButton(true);
         }
     }
 

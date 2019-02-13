@@ -2,12 +2,14 @@
 using TheGameNameSpace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CardSlotDownwards : CardSlotBase, IDropHandler
 {
     public static int currentSlotNumber = 200;
     public static bool hasCardPlaced = false;
     public EndTurnPanelController endTurnPanelController;
+    public Button validationButton;
 
     public void OnDrop(PointerEventData eventData)
     {

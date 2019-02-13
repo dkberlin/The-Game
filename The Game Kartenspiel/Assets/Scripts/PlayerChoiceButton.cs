@@ -12,7 +12,7 @@ public class PlayerChoiceButton : MonoBehaviour {
         {
             GameCore.numberOfHandCards = 8;
 
-            SceneManager.LoadScene("gameScene");
+//            SceneManager.LoadScene("gameScene");
         }
 
         else
@@ -20,7 +20,7 @@ public class PlayerChoiceButton : MonoBehaviour {
             GameCore.numberOfHandCards = 7;
             GameCore.numberOfPlayers = 2;
 
-            SceneManager.LoadScene("gameScene");
+//            SceneManager.LoadScene("gameScene");
 
         }
     }
