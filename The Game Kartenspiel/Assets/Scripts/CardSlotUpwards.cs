@@ -28,14 +28,15 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
 
         if (!_cardInPlace || cardNumber > currentSlotNumber || currentSlotNumber - 10 == cardNumber)
         {
-            ActivateChoiceButtons();
+            _currentDraggedCard.transform.SetParent(transform);
+            _currentDraggedCard.transform.localPosition = new Vector3(0,0,0);
+            
+            SetChoiceButtons(true);
 //            if (hasCardPlaced)
 //            {
 //                _cardInSlot(transform).gameObject.SetActive(false);
 //            }
             CardHandler.DisableDragHandler(_currentDraggedCard, _cardInPlace);
-            _currentDraggedCard.transform.SetParent(transform);
-            _currentDraggedCard.transform.localPosition = new Vector3(0,0,0);
             
 
             var currentPlayerNumber = GameCore.currentPlayer;
@@ -60,27 +61,55 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
         }
     }
 
-    private void ActivateChoiceButtons()
+    private void SetChoiceButtons(bool value)
     {
         validationButton.transform.gameObject.SetActive(true);
-        validationButton.onClick.AddListener(OnValidationClicked);
         declineButton.transform.gameObject.SetActive(true);
-        declineButton.onClick.AddListener(OnDeclineClicked);
+        
+        if (value)
+        {
+            validationButton.GetComponent<Animator>().SetTrigger("FadeIn");
+            declineButton.GetComponent<Animator>().SetTrigger("FadeIn");
+            validationButton.onClick.AddListener(OnValidationClicked);
+            declineButton.onClick.AddListener(OnDeclineClicked);
+        }
+        else
+        {
+            validationButton.GetComponent<Animator>().SetTrigger("FadeOut");
+            declineButton.GetComponent<Animator>().SetTrigger("FadeOut");
+            validationButton.onClick.RemoveListener(OnValidationClicked);
+            declineButton.onClick.RemoveListener(OnDeclineClicked);
+        }
     }
-    
-    private void DeactivateChoiceButtons()
-    {
-        validationButton.transform.gameObject.SetActive(false);
-        validationButton.onClick.RemoveListener(OnValidationClicked);
-        declineButton.transform.gameObject.SetActive(false);
-        declineButton.onClick.RemoveListener(OnDeclineClicked);
-    }
+//    private void ActivateChoiceButtons()
+//    {
+//        validationButton.GetComponent<Animator>().SetTrigger("FadeIn");
+//        declineButton.GetComponent<Animator>().SetTrigger("FadeIn");
+//
+//
+//        validationButton.transform.gameObject.SetActive(true);
+//        validationButton.onClick.AddListener(OnValidationClicked);
+//        declineButton.transform.gameObject.SetActive(true);
+//        declineButton.onClick.AddListener(OnDeclineClicked);
+//    }
+//    
+//    private void DeactivateChoiceButtons()
+//    {
+//        validationButton.GetComponent<Animator>().SetTrigger("FadeOut");
+//        declineButton.GetComponent<Animator>().SetTrigger("FadeOut");
+//
+//
+//        validationButton.transform.gameObject.SetActive(false);
+//        validationButton.onClick.RemoveListener(OnValidationClicked);
+//        declineButton.transform.gameObject.SetActive(false);
+//        declineButton.onClick.RemoveListener(OnDeclineClicked);
+//    }
 
     private void OnDeclineClicked()
     {
         CardHandler.EnableDragHandler(_currentDraggedCard, _cardInPlace);
         DragHandler.draggedCard.transform.SetParent(_currentPlayerHandCards.transform);
-        DeactivateChoiceButtons();
+        SetChoiceButtons(false);
     }
 
     private void OnValidationClicked()
@@ -91,7 +120,7 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
         }
         
         GameCore.cardsDropped++;
-        DeactivateChoiceButtons();
+        SetChoiceButtons(false);
         
         if (GameCore.cardsDropped >= 2)
         {
