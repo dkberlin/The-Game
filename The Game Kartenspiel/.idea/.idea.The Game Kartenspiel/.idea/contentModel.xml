@@ -16,6 +16,7 @@
           <e p="EndTurnPanelController.cs" t="Include" />
           <e p="GameCore.cs" t="Include" />
           <e p="LoadOnEnter.cs" t="Include" />
+          <e p="MenuHelper.cs" t="Include" />
           <e p="Player.cs" t="Include" />
           <e p="PlayerChoiceButton.cs" t="Include" />
           <e p="ReturnToMainMenu.cs" t="Include" />

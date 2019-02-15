@@ -13,7 +13,8 @@ public class LoadOnEnter : StateMachineBehaviour {
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
 //		GameCore.numberOfHandCards = 8;
-		SceneManager.LoadScene("gameScene");
+//		SceneManager.LoadScene("gameScene");
+		Initiate.Fade("gameScene",Color.black,3f);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -11,6 +11,7 @@ public class PlayerChoiceButton : MonoBehaviour {
         if (transform.name == "1Player")
         {
             GameCore.numberOfHandCards = 8;
+            Initiate.Fade("gameScene",Color.black, 1f);
 
 //            SceneManager.LoadScene("gameScene");
         }
@@ -19,6 +20,9 @@ public class PlayerChoiceButton : MonoBehaviour {
         {
             GameCore.numberOfHandCards = 7;
             GameCore.numberOfPlayers = 2;
+            
+            Initiate.Fade("gameScene",Color.black, 1f);
+
 
 //            SceneManager.LoadScene("gameScene");
 
