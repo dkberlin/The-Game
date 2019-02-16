@@ -17,11 +17,23 @@
           <e p="GameCore.cs" t="Include" />
           <e p="LoadOnEnter.cs" t="Include" />
           <e p="MenuHelper.cs" t="Include" />
+          <e p="MusicHandler.cs" t="Include" />
           <e p="Player.cs" t="Include" />
           <e p="PlayerChoiceButton.cs" t="Include" />
           <e p="ReturnToMainMenu.cs" t="Include" />
           <e p="ShowCurrentPlayerNumber.cs" t="Include" />
           <e p="WinOrLoseText.cs" t="Include" />
+        </e>
+        <e p="Simple Scene Fade Load System" t="Include">
+          <e p="ReadMeFirst.txt" t="Include" />
+          <e p="Scripts" t="Include">
+            <e p="AudioFader.cs" t="Include" />
+            <e p="CanvasGroupFader.cs" t="Include" />
+            <e p="FadeItAll.cs" t="Include" />
+            <e p="Fader.cs" t="Include" />
+            <e p="ICanFade.cs" t="Include" />
+            <e p="SceneFader.cs" t="Include" />
+          </e>
         </e>
         <e p="TextMesh Pro" t="Include">
           <e p="Resources" t="Include">

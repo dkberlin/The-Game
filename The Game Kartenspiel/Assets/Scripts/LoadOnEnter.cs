@@ -14,7 +14,7 @@ public class LoadOnEnter : StateMachineBehaviour {
 	{
 //		GameCore.numberOfHandCards = 8;
 //		SceneManager.LoadScene("gameScene");
-		Initiate.Fade("gameScene",Color.black,3f);
+		FadeItAll.FadeSceneChange("gameScene",Color.black,3f);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
