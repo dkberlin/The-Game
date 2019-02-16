@@ -1,23 +1,23 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public abstract class Fader : MonoBehaviour
 {
-    public abstract bool start {get; set;} 
-    public abstract float fadeDamp {get; set;}
-    public abstract bool isFadeIn {get; set;}
-    public abstract float lastTime {get; set;}
-    public abstract bool startedLoading {get; set; }
+    public abstract bool Start {get; set;} 
+    public abstract bool IsFadeIn {get; set;}
+    public abstract bool StartedLoading {get; set; }
+    public abstract float FadeDamp {get; set;}
+    public abstract float LastTime {get; set;}
     public abstract void StartFading();
     public abstract IEnumerator FadeIt();
 
-    public virtual string fadeScene {get;set;}
-    public virtual float alpha {get; set;}
-    public virtual float volume {get; set;}
-    public virtual Color fadeColor {get; set;}
-    public virtual CanvasGroup myCanvas {get; set;}
-    public virtual Image bg {get; set;}
-    public virtual AudioSource myAudioSource {get; set;}
+    public virtual string FadeScene {get;set;}
+    public virtual float Alpha {get; set;}
+    public virtual float MyAlpha {get; set;}
+    public virtual float MyVolume {get; set;}
+    public virtual Color FadeColor {get; set;}
+    public virtual CanvasGroup MyCanvas {get; set;}
+    public virtual Image BackgroundImage {get; set;}
+    public virtual AudioSource MyAudioSource {get; set;}
 }

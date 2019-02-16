@@ -28,14 +28,12 @@ namespace TheGameNameSpace
 
         public static int cardsDropped = 0;
 
-        private static CardSlotUpwards[] upwardCards;
-        private static CardSlotDownwards[] downwardCards;
+        private static List<CardSlot> upwardCards;
+        private static List<CardSlot> downwardCards;
 
         public static ShowCurrentPlayerNumber playerNumberUIElement;
 
         public static bool lostTheGame = false;
-
-
 
         void Start () {
             for (int i = 0; i < numberOfPlayers; i++)
@@ -43,8 +41,24 @@ namespace TheGameNameSpace
                 InstantiatePlayers(i +1);
             }
 
-            upwardCards = FindObjectsOfType<CardSlotUpwards>();
-            downwardCards = FindObjectsOfType<CardSlotDownwards>();
+//            upwardCards = FindObjectsOfType<CardSlotUpwards>();
+//            downwardCards = FindObjectsOfType<CardSlot>().;
+            upwardCards = new List<CardSlot>();
+            downwardCards = new List<CardSlot>();
+            
+            var cardSlots = FindObjectsOfType<CardSlot>();
+
+            foreach (var slot in cardSlots)
+            {
+                if (slot.isUpwardSlot)
+                {
+                    upwardCards.Add(slot);
+                }
+                else
+                {
+                    downwardCards.Add(slot);
+                }
+            }
 
             playerNumberUIElement = FindObjectOfType<ShowCurrentPlayerNumber>();
 

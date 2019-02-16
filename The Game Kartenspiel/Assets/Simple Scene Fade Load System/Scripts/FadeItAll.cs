@@ -1,17 +1,15 @@
 using UnityEngine;
-using System.Collections;
-using UnityEditor;
 using UnityEngine.UI;
+
 public static class FadeItAll
 {
-    static bool areWeFadingScenes = false;
-    static bool areWeFadingMusic = false;
-    static bool areWeFadingCanvas = false;
+    private static bool _isFadingScenes;
+    private static bool _isFadingMusic;
+    private static bool _isFadingCanvasGroup;
 
-    //Create Fader object and assing the fade scripts and assign all the variables
     public static void FadeSceneChange(string scene, Color col, float multiplier)
     {
-        if (areWeFadingScenes)
+        if (_isFadingScenes)
         {
             Debug.Log("Already Fading");
             return;
@@ -20,44 +18,31 @@ public static class FadeItAll
         GameObject init = new GameObject();
         init.name = "SceneFader";
         Canvas myCanvas = init.AddComponent<Canvas>();
+        var sceneFader = init.AddComponent<SceneFader>();
+        
         myCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
         init.AddComponent<CanvasGroup>();
         init.AddComponent<Image>();
 
-        var sceneFader = init.AddComponent<SceneFader>();
-
-        sceneFader.fadeDamp = multiplier;
-        sceneFader.fadeScene = scene;
-        sceneFader.fadeColor = col;
-        sceneFader.start = true;
-        areWeFadingScenes = true;
+        sceneFader.FadeDamp = multiplier;
+        sceneFader.FadeScene = scene;
+        sceneFader.FadeColor = col;
+        sceneFader.Start = true;
+        _isFadingScenes = true;
         sceneFader.StartFading();
-    }
-
-    public static void DoneFading() {
-        areWeFadingScenes = false;
-        areWeFadingCanvas = false;
-        areWeFadingMusic = false;
     }
     
     public static void FadeAudio(AudioSource source, float multiplier, bool shouldFadeIn)
     {
-        if (areWeFadingMusic)
-        {
-            Debug.Log("Already Fading");
-            return;
-        }
-        
         GameObject init = new GameObject();
         init.name = "AudioFader";
-        
         var audioFader = init.AddComponent<AudioFader>();
         
-        audioFader.fadeDamp = multiplier;
-        audioFader.myAudioSource = source;
-        audioFader.start = true;
-        areWeFadingMusic = true;
-        audioFader.isFadeIn = shouldFadeIn;
+        audioFader.FadeDamp = multiplier;
+        audioFader.MyAudioSource = source;
+        audioFader.Start = true;
+        _isFadingMusic = true;
+        audioFader.IsFadeIn = shouldFadeIn;
         audioFader.StartFading();
     }
    
@@ -65,12 +50,19 @@ public static class FadeItAll
     {
         GameObject init = new GameObject();
         init.name = "CanvasFader";
-        var audioFader = init.AddComponent<CanvasGroupFader>();
+        var canvasFader = init.AddComponent<CanvasGroupFader>();
         
-        audioFader.fadeDamp = multiplier;
-        audioFader.start = true;
-        areWeFadingCanvas = true;
-        audioFader.StartFading();
-        audioFader.isFadeIn = shouldFadeIn;
+        canvasFader.MyCanvas = group;
+        canvasFader.FadeDamp = multiplier;
+        canvasFader.Start = true;
+        _isFadingCanvasGroup = true;
+        canvasFader.IsFadeIn = shouldFadeIn;
+        canvasFader.StartFading();
+    }
+    
+    public static void DoneFading() {
+        _isFadingScenes = false;
+        _isFadingCanvasGroup = false;
+        _isFadingMusic = false;
     }
 }

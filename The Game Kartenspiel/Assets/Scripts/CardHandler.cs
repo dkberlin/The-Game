@@ -94,4 +94,17 @@ public class CardHandler : MonoBehaviour {
             cardInSlot.GetComponent<DragHandler>().enabled = true;
         }
     }
+    
+    public void EnableAllHandCards(bool shouldbeEnabled)
+    {
+        foreach (var card in cardSlotHandCardsPlayer1.currentHandCards)
+        {
+            card.GetComponent<DragHandler>().enabled = shouldbeEnabled;
+        }
+
+        foreach (var card in cardSlotHandCardsPlayer2.currentHandCards)
+        {
+            card.GetComponent<DragHandler>().enabled = shouldbeEnabled;
+        }
+    }
 }

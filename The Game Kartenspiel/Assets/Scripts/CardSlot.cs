@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CardSlotUpwards : CardSlotBase, IDropHandler
+public class CardSlot : CardSlotBase, IDropHandler
 {
-    public static int currentSlotNumber;
-    public static bool hasCardPlaced;
+    public static int currentSlotNumber = 200;
+    public static bool hasCardPlaced = false;
     public EndTurnPanelController endTurnPanelController;
     public Button validationButton;
     public Button declineButton;
+    public SoundHandler soundHandler;
+    public CardHandler cardHandler;
     
     private CardBase _currentDraggedCard;
     private CardBase _cardInPlace;
@@ -24,8 +26,8 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
 
         currentSlotNumber = _cardInPlace ? _cardInPlace._cardNumber : 200;
         hasCardPlaced = _cardInPlace;
-
-        if (!_cardInPlace || cardNumber > currentSlotNumber || currentSlotNumber - 10 == cardNumber)
+        
+        if (CheckForCardDrop(cardNumber))
         {
             _currentDraggedCard.transform.SetParent(transform);
             _currentDraggedCard.transform.localPosition = new Vector3(0,0,0);
@@ -47,10 +49,26 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
                 SceneManager.LoadScene("GameOverScene");
             }
         }
+        else
+        {
+            soundHandler.PlayDeclineSound();
+        }
     }
-
+    
+    private bool CheckForCardDrop(int cardNumber)
+    {
+        if (isUpwardSlot)
+        {
+            return (!_cardInPlace || cardNumber > currentSlotNumber || currentSlotNumber - 10 == cardNumber);
+        }
+        
+        return (!_cardInPlace || cardNumber < currentSlotNumber || currentSlotNumber + 10 == cardNumber);
+    }
+    
     private void SetChoiceButtons(bool value)
     {
+        cardHandler.EnableAllHandCards(false);
+        
         validationButton.transform.gameObject.SetActive(true);
         declineButton.transform.gameObject.SetActive(true);
         
@@ -72,6 +90,8 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
 
     private void OnDeclineClicked()
     {
+        cardHandler.EnableAllHandCards(true);
+
         CardHandler.EnableDragHandler(_currentDraggedCard, _cardInPlace);
         DragHandler.draggedCard.transform.SetParent(_currentPlayerHandCards.transform);
         SetChoiceButtons(false);
@@ -91,5 +111,7 @@ public class CardSlotUpwards : CardSlotBase, IDropHandler
         {
             endTurnPanelController.SetEndTurnButton(true);
         }
+        
+        cardHandler.EnableAllHandCards(true);
     }
 }

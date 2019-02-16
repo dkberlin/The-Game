@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TheGameNameSpace;
-using UnityEngine.SceneManagement;
 
 public class PlayerChoiceButton : MonoBehaviour 
 {
@@ -16,8 +13,6 @@ public class PlayerChoiceButton : MonoBehaviour
         {
             GameCore.numberOfHandCards = 8;
             FadeItAll.FadeSceneChange("gameScene",Color.black, 1f);
-
-//            SceneManager.LoadScene("gameScene");
         }
 
         else
@@ -26,10 +21,6 @@ public class PlayerChoiceButton : MonoBehaviour
             GameCore.numberOfPlayers = 2;
             
             FadeItAll.FadeSceneChange("gameScene",Color.black, 1f);
-
-
-//            SceneManager.LoadScene("gameScene");
-
         }
     }
 }

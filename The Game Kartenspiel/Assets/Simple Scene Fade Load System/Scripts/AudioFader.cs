@@ -1,68 +1,65 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioFader : Fader 
 {
-	public override bool start { get; set; }
-	public override float fadeDamp { get; set; }
-	public override bool isFadeIn { get; set; }
-	public override float lastTime { get; set; }
-	public override bool startedLoading { get; set; }
-	public override AudioSource myAudioSource { get; set; }
+	public override float FadeDamp { get; set; }
+	public override float LastTime { get; set; }
+	public override bool Start { get; set; }
+	public override bool IsFadeIn { get; set; }
+	public override bool StartedLoading { get; set; }
+	public override AudioSource MyAudioSource { get; set; }
 
 	public override void StartFading()
 	{
-		DontDestroyOnLoad(gameObject);
-
-		//Checking and starting the coroutine
-		if (myAudioSource)
+		if (MyAudioSource)
 		{
 			StartCoroutine(FadeIt());
 		}
 		else
-			Debug.LogWarning("Something is missing please reimport the package.");
+		{
+			Debug.LogWarning("Audiosource Missing.");
+		}
 	}
 
 	public override IEnumerator FadeIt()
 	{
-		while (!start)
+		while (!Start)
 		{
-			//waiting to start
 			yield return null;
 		}
-		lastTime = Time.time;
-		float coDelta = lastTime;
+		
+		LastTime = Time.time;
+		float coDelta = LastTime;
 		bool hasFaded = false;
 
 		while (!hasFaded)
 		{
-			coDelta = Time.time - lastTime;
-			if (isFadeIn)
+			coDelta = Time.time - LastTime;
+			if (IsFadeIn)
 			{
-				//Fade in
-				volume = NewVolume(coDelta, 1, volume);
-				if (volume == 1)
+				MyVolume = NewVolume(coDelta, 1, MyVolume);
+				
+				if (MyVolume == 1)
 				{
 					hasFaded = true;
 				}
 			}
 			else
 			{
-				//Fade out
-				volume = NewVolume(coDelta, 0, myAudioSource.volume);
+				MyVolume = NewVolume(coDelta, 0, MyAudioSource.volume);
 				
-				if (volume == 0)
+				if (MyVolume == 0)
 				{
 					hasFaded = true;
 				}
-
 			}
-			lastTime = Time.time;
-			myAudioSource.volume = volume;
+			
+			LastTime = Time.time;
+			MyAudioSource.volume = MyVolume;
+			
 			yield return null;
 		}
-	
 		
 		FadeItAll.DoneFading();
 
@@ -76,13 +73,13 @@ public class AudioFader : Fader
 		switch (to)
 		{
 			case 0:
-				currVol -= fadeDamp * delta;
+				currVol -= FadeDamp * delta;
 				if (currVol <= 0)
 					currVol = 0;
 
 				break;
 			case 1:
-				currVol += fadeDamp * delta;
+				currVol += FadeDamp * delta;
 				if (currVol >= 1)
 					currVol = 1;
 

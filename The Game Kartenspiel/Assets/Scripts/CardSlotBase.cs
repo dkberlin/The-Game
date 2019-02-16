@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class CardSlotBase : MonoBehaviour
 {
+    [SerializeField] public bool isUpwardSlot;
+    
     private static int numberOfCardsInSlot;
 
     public virtual int GetCardAmountInSlot(Transform givenTransform)
@@ -25,7 +27,7 @@ public class CardSlotBase : MonoBehaviour
         return null;
     }
 
-    public virtual int GetNumberOfCardInSlot(CardSlotDownwards slot)
+    public virtual int GetNumberOfCardInSlot(CardSlot slot)
     {
         var cardInSlot = _cardInSlot(slot.transform);
 
