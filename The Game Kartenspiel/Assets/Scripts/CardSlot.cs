@@ -21,10 +21,10 @@ public class CardSlot : CardSlotBase, IDropHandler
     public void OnDrop(PointerEventData eventData)
     {
         _currentDraggedCard = DragHandler.draggedCard;
-        int cardNumber = _currentDraggedCard._cardNumber;
+        int cardNumber = _currentDraggedCard.CardNumber;
         _cardInPlace = _cardInSlot(transform);
 
-        currentSlotNumber = _cardInPlace ? _cardInPlace._cardNumber : 200;
+        currentSlotNumber = _cardInPlace ? _cardInPlace.CardNumber : 200;
         hasCardPlaced = _cardInPlace;
         
         if (CheckForCardDrop(cardNumber))

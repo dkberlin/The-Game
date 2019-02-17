@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TheGameNameSpace;
 
@@ -11,19 +7,19 @@ public class CardHandler : MonoBehaviour {
     public CardBase playerCard;
     public CardSlotHandCards cardSlotHandCardsPlayer1;
     public CardSlotHandCards cardSlotHandCardsPlayer2;
-    private Player player1;
-    private Player player2;
+    private Player _player1;
+    private Player _player2;
 
     public void OnGameStart()
     {
         if (GameCore.numberOfPlayers == 2)
         {
-            player2 = GameCore.player2;
+            _player2 = GameCore.player2;
             cardSlotHandCardsPlayer2.gameObject.SetActive(true);
             DrawFirstCards(2);
         }
 
-        player1 = GameCore.player1;
+        _player1 = GameCore.player1;
         DrawFirstCards(1);
     }
 
@@ -41,7 +37,7 @@ public class CardHandler : MonoBehaviour {
         for (int i = 0; i < cardAmountToRefill; i++)
         {
             var card = Instantiate(playerCard);
-            int cardNumber = card.GetComponent<CardBase>()._cardNumber;
+            int cardNumber = card.GetComponent<CardBase>().CardNumber;
             var cardTextComponent = card.GetComponentInChildren<Text>();
             var bigCardNumber = card.bigNumber;
             var smallCardNumber = card.smallNumber;
@@ -51,14 +47,14 @@ public class CardHandler : MonoBehaviour {
                 cardSlotHandCardsPlayer1.currentHandCards.Add(card);
                 card.transform.SetParent(cardSlotHandCardsPlayer1.transform);
                 card.transform.localScale = new Vector3(1,1,1);
-                player1.savedHandCards.Add(card);
+                _player1.savedHandCards.Add(card);
             }
             else
             {
                 cardSlotHandCardsPlayer2.currentHandCards.Add(card);
                 card.transform.SetParent(cardSlotHandCardsPlayer2.transform);
                 card.transform.localScale = new Vector3(1,1,1);
-                player2.savedHandCards.Add(card);
+                _player2.savedHandCards.Add(card);
             }
       
             if (bigCardNumber != null && smallCardNumber != null)

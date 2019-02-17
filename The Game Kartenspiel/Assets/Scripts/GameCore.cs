@@ -143,7 +143,7 @@ namespace TheGameNameSpace
                 foreach (var slot in downwardCards)
                 {
                     int slotNumber = slot.GetNumberOfCardInSlot(slot);
-                    if (card._cardNumber < slotNumber)
+                    if (card.CardNumber < slotNumber)
                     {
                         downwardCardToPlace = true;
                     }
@@ -152,7 +152,7 @@ namespace TheGameNameSpace
                 foreach (var slot in upwardCards)
                 {
                     int slotnumber = slot.GetNumberOfCardInSlot(slot);
-                    if (card._cardNumber > slotnumber)
+                    if (card.CardNumber > slotnumber)
                     {
                         upwardCardToPlace = true;
                     }

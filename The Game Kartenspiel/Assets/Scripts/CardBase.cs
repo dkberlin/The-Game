@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using TheGameNameSpace;
 using TMPro;
 
@@ -11,18 +7,18 @@ public class CardBase : MonoBehaviour
     public TMP_Text bigNumber;
     public TMP_Text smallNumber;
     
-    private int cardNumber = 0;
-    public int _cardNumber
+    private int _cardNumber;
+    public int CardNumber
     {
         get
         {
-            if (cardNumber == 0)
+            if (_cardNumber == 0)
             {
                 return SetRandomCardNumber();
             }
             else
             {
-                return cardNumber;
+                return _cardNumber;
             }
         }
     }
@@ -34,7 +30,7 @@ public class CardBase : MonoBehaviour
 
         CardHandler.UpdateListOfCards(randomIndex);
 
-        cardNumber = drawnNumber;
+        _cardNumber = drawnNumber;
         return drawnNumber;
     }
 }

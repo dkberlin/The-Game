@@ -34,6 +34,13 @@ public static class FadeItAll
     
     public static void FadeAudio(AudioSource source, float multiplier, bool shouldFadeIn)
     {
+        // optional
+//        if (_isFadingMusic)
+//        {
+//            Debug.Log("Already Fading");
+//            return;
+//        }
+        
         GameObject init = new GameObject();
         init.name = "AudioFader";
         var audioFader = init.AddComponent<AudioFader>();
@@ -41,13 +48,21 @@ public static class FadeItAll
         audioFader.FadeDamp = multiplier;
         audioFader.MyAudioSource = source;
         audioFader.Start = true;
-        _isFadingMusic = true;
+        // optional
+//        _isFadingMusic = true;    
         audioFader.IsFadeIn = shouldFadeIn;
         audioFader.StartFading();
     }
    
     public static void FadeCanvasGroup(CanvasGroup group, float multiplier, bool shouldFadeIn)
     {
+        // optional
+//        if (_isFadingCanvasGroup)
+//        {
+//            Debug.Log("Already Fading");
+//            return;
+//        }
+        
         GameObject init = new GameObject();
         init.name = "CanvasFader";
         var canvasFader = init.AddComponent<CanvasGroupFader>();
@@ -55,7 +70,8 @@ public static class FadeItAll
         canvasFader.MyCanvas = group;
         canvasFader.FadeDamp = multiplier;
         canvasFader.Start = true;
-        _isFadingCanvasGroup = true;
+        // optional
+//        _isFadingCanvasGroup = true;
         canvasFader.IsFadeIn = shouldFadeIn;
         canvasFader.StartFading();
     }

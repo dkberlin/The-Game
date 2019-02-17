@@ -6,49 +6,46 @@ using UnityEngine.SceneManagement;
 
 public class CardSlotBase : MonoBehaviour
 {
-    [SerializeField] public bool isUpwardSlot;
-    
-    private static int numberOfCardsInSlot;
+    public bool isUpwardSlot;
+
+    private static int _numberOfCardsInSlot;
 
     public virtual int GetCardAmountInSlot(Transform givenTransform)
     {
-        numberOfCardsInSlot = givenTransform.childCount;
-        return numberOfCardsInSlot;
+        _numberOfCardsInSlot = givenTransform.childCount;
+        return _numberOfCardsInSlot;
     }
 
     public CardBase _cardInSlot(Transform givenTransform)
     {
-        numberOfCardsInSlot = GetCardAmountInSlot(givenTransform);
-        if (numberOfCardsInSlot > 0)
+        _numberOfCardsInSlot = GetCardAmountInSlot(givenTransform);
+        if (_numberOfCardsInSlot > 0)
         {
-            CardBase cardInSlot = transform.GetChild(numberOfCardsInSlot-1).gameObject.GetComponent<CardBase>();
+            CardBase cardInSlot = transform.GetChild(_numberOfCardsInSlot-1).gameObject.GetComponent<CardBase>();
             return cardInSlot;
         }
+        
         return null;
     }
 
-    public virtual int GetNumberOfCardInSlot(CardSlot slot)
+    public int GetNumberOfCardInSlot(CardSlot slot)
     {
         var cardInSlot = _cardInSlot(slot.transform);
-
+        
         if (cardInSlot == null)
         {
-            return 101;
+            if (!slot.isUpwardSlot)
+            {
+                return 101;
+            }
+            
+            else if (slot.isUpwardSlot)
+            {
+                return 0;
+            }
         }
-
-        return cardInSlot._cardNumber;
-    }
-
-    public virtual int GetNumberOfCardInSlot(CardSlotUpwards slot)
-    {
-        var cardInSlot = _cardInSlot(slot.transform);
-
-        if (cardInSlot == null)
-        {
-            return 0;
-        }
-
-        return cardInSlot._cardNumber;
+        
+        return cardInSlot.CardNumber;
     }
 
     public virtual void CheckIfGameWon(int cardsInHand)

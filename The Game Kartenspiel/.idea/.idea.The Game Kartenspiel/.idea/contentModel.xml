@@ -7,10 +7,9 @@
         <e p="Scripts" t="Include">
           <e p="CardBase.cs" t="Include" />
           <e p="CardHandler.cs" t="Include" />
+          <e p="CardSlot.cs" t="Include" />
           <e p="CardSlotBase.cs" t="Include" />
-          <e p="CardSlotDownwards.cs" t="Include" />
           <e p="CardSlotHandCards.cs" t="Include" />
-          <e p="CardSlotUpwards.cs" t="Include" />
           <e p="DragHandler.cs" t="Include" />
           <e p="EndTurnButton.cs" t="Include" />
           <e p="EndTurnPanelController.cs" t="Include" />
@@ -22,6 +21,7 @@
           <e p="PlayerChoiceButton.cs" t="Include" />
           <e p="ReturnToMainMenu.cs" t="Include" />
           <e p="ShowCurrentPlayerNumber.cs" t="Include" />
+          <e p="SoundHandler.cs" t="Include" />
           <e p="WinOrLoseText.cs" t="Include" />
         </e>
         <e p="Simple Scene Fade Load System" t="Include">
@@ -31,7 +31,7 @@
             <e p="CanvasGroupFader.cs" t="Include" />
             <e p="FadeItAll.cs" t="Include" />
             <e p="Fader.cs" t="Include" />
-            <e p="ICanFade.cs" t="Include" />
+            <e p="readme.txt" t="Include" />
             <e p="SceneFader.cs" t="Include" />
           </e>
         </e>
