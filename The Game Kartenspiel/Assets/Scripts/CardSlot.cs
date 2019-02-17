@@ -6,63 +6,54 @@ using UnityEngine.UI;
 
 public class CardSlot : CardSlotBase, IDropHandler
 {
-    public static int currentSlotNumber = 200;
-    public static bool hasCardPlaced = false;
-    public EndTurnPanelController endTurnPanelController;
-    public Button validationButton;
-    public Button declineButton;
-    public SoundHandler soundHandler;
-    public CardHandler cardHandler;
-    
+    private static int _currentSlotNumber = 200;
+    private static bool _hasCardPlaced;
     private CardBase _currentDraggedCard;
     private CardBase _cardInPlace;
     private CardSlotHandCards _currentPlayerHandCards;
+    
+    public EndTurnPanelController endTurnPanelController;
+    public Button validationButton;
+    public Button declineButton;
+    public CardHandler cardHandler;
 
     public void OnDrop(PointerEventData eventData)
     {
         _currentDraggedCard = DragHandler.draggedCard;
+        var currentPlayer = GameCore.currentPlayer == 1 ? GameCore.player1 : GameCore.player2;
+
+        _currentPlayerHandCards = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
         int cardNumber = _currentDraggedCard.CardNumber;
         _cardInPlace = _cardInSlot(transform);
 
-        currentSlotNumber = _cardInPlace ? _cardInPlace.CardNumber : 200;
-        hasCardPlaced = _cardInPlace;
+        _currentSlotNumber = _cardInPlace ? _cardInPlace.CardNumber : 200;
+        _hasCardPlaced = _cardInPlace;
         
-        if (CheckForCardDrop(cardNumber))
+        if (CanDropCard(cardNumber))
         {
             _currentDraggedCard.transform.SetParent(transform);
             _currentDraggedCard.transform.localPosition = new Vector3(0,0,0);
             
             SetChoiceButtons(true);
-            CardHandler.DisableDragHandler(_currentDraggedCard, _cardInPlace);
+            cardHandler.DisableDragHandler(_currentDraggedCard, _cardInPlace);
             
-
-            var currentPlayerNumber = GameCore.currentPlayer;
-            var currentPlayer = currentPlayerNumber == 1 ? GameCore.player1 : GameCore.player2;
-
-            _currentPlayerHandCards = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
-            _currentPlayerHandCards.currentHandCards.Remove(_currentDraggedCard);
-            CheckIfGameWon(_currentPlayerHandCards.currentHandCards.Count);
-
-            if (GameCore.cardsDropped == 1 && !GameCore.CanStillWinTheGame())
-            {
-                Debug.Log("Game Over!");
-                SceneManager.LoadScene("GameOverScene");
-            }
+            GameEvents.Invoke_OnCardDroppedInSlot(_currentDraggedCard, _currentPlayerHandCards.currentHandCards.Count);
         }
+        
         else
         {
-            soundHandler.PlayDeclineSound();
+            GameEvents.Invoke_OnCardDropDeclined();
         }
     }
     
-    private bool CheckForCardDrop(int cardNumber)
+    private bool CanDropCard(int cardNumber)
     {
         if (isUpwardSlot)
         {
-            return (!_cardInPlace || cardNumber > currentSlotNumber || currentSlotNumber - 10 == cardNumber);
+            return (!_cardInPlace || cardNumber > _currentSlotNumber || _currentSlotNumber - 10 == cardNumber);
         }
         
-        return (!_cardInPlace || cardNumber < currentSlotNumber || currentSlotNumber + 10 == cardNumber);
+        return (!_cardInPlace || cardNumber < _currentSlotNumber || _currentSlotNumber + 10 == cardNumber);
     }
     
     private void SetChoiceButtons(bool value)
@@ -99,7 +90,7 @@ public class CardSlot : CardSlotBase, IDropHandler
 
     private void OnValidationClicked()
     {
-        if (hasCardPlaced)
+        if (_hasCardPlaced)
         {
             _cardInPlace.transform.gameObject.SetActive(false);
         }

@@ -48,14 +48,5 @@ public class CardSlotBase : MonoBehaviour
         return cardInSlot.CardNumber;
     }
 
-    public virtual void CheckIfGameWon(int cardsInHand)
-    {
-        int numberOfCardsLeft = GameCore.drawnNumbers.Count;
-
-        if (cardsInHand == 0 && numberOfCardsLeft == 0)
-        {
-            GameCore.lostTheGame = false;
-            SceneManager.LoadScene("GameOverScene");
-        }
-    }
+    
 }

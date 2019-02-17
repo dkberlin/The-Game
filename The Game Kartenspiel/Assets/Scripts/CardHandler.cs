@@ -10,6 +10,37 @@ public class CardHandler : MonoBehaviour {
     private Player _player1;
     private Player _player2;
 
+    private void Start()
+    {
+        GameEvents.OnCardDroppedInSlot += RemoveHandCard;
+        GameEvents.OnEndTurnButtonClicked += EndTurnAndRefillHandCards;
+    }
+
+    private void EndTurnAndRefillHandCards()
+    {
+        int currentPlayerNumber = GameCore.currentPlayer == 1 ? 1 : 2;
+        var currentPlayer = currentPlayerNumber == 1 ? GameCore.player1 : GameCore.player2;
+        var handCardSlot = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
+        int fullHandCardsAmount = GameCore.numberOfHandCards;
+        int currentAmountOfHandCards = handCardSlot.GetCardAmountInSlot(handCardSlot.transform);
+        
+        if (GameCore.numberOfPlayers == 2)
+        {
+            RefillHandCards(fullHandCardsAmount - currentAmountOfHandCards, GameCore.currentPlayer);
+            handCardSlot.UpdateHandCards();
+        }
+        else
+        {
+            RefillHandCards(fullHandCardsAmount - currentAmountOfHandCards, GameCore.currentPlayer);
+            handCardSlot.UpdateHandCards();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.OnCardDroppedInSlot -= RemoveHandCard;
+    }
+
     public void OnGameStart()
     {
         if (GameCore.numberOfPlayers == 2)
@@ -70,7 +101,7 @@ public class CardHandler : MonoBehaviour {
         GameCore.drawnNumbers.RemoveAt(randomIndex);
     }
 
-    public static void DisableDragHandler(CardBase draggedCard, CardBase cardInSlot = null)
+    public void DisableDragHandler(CardBase draggedCard, CardBase cardInSlot = null)
     {
         draggedCard.GetComponent<DragHandler>().enabled = false;
 
@@ -102,5 +133,14 @@ public class CardHandler : MonoBehaviour {
         {
             card.GetComponent<DragHandler>().enabled = shouldbeEnabled;
         }
+    }
+
+    public void RemoveHandCard(CardBase droppedCard, int numberOfCardsInHand)
+    {
+        var currentPlayerNumber = GameCore.currentPlayer;
+        var currentPlayer = currentPlayerNumber == 1 ? GameCore.player1 : GameCore.player2;
+
+        var currentPlayerHandCards = GameCore.GetHandCardSlotOfPlayer(currentPlayer);
+        currentPlayerHandCards.currentHandCards.Remove(droppedCard);
     }
 }

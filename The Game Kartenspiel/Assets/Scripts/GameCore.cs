@@ -35,14 +35,23 @@ namespace TheGameNameSpace
 
         public static bool lostTheGame = false;
 
+        private void OnDestroy()
+        {
+            GameEvents.OnCardDroppedInSlot -= OnCardDroppedInSlot;
+            GameEvents.OnEndTurnButtonClicked -= SetupNextRound;
+        }
+
         void Start () {
+            
+            GameEvents.OnCardDroppedInSlot += OnCardDroppedInSlot;
+            GameEvents.OnEndTurnButtonClicked += SetupNextRound;
+            
+            
             for (int i = 0; i < numberOfPlayers; i++)
             {
                 InstantiatePlayers(i +1);
             }
 
-//            upwardCards = FindObjectsOfType<CardSlotUpwards>();
-//            downwardCards = FindObjectsOfType<CardSlot>().;
             upwardCards = new List<CardSlot>();
             downwardCards = new List<CardSlot>();
             
@@ -93,6 +102,26 @@ namespace TheGameNameSpace
 
             cardHandler.OnGameStart();
 	    }
+
+        private void SetupNextRound()
+        {
+            if (numberOfPlayers == 2)
+            {
+                SetPlayerHandCardsNonVisible(currentPlayer);
+                
+                int nextPlayer = currentPlayer == 1 ? 2: 1;
+                
+                playerNumberUIElement.SetPlayerNumber(nextPlayer);
+                currentPlayer = nextPlayer;
+            }
+            
+            cardsDropped = 0;
+        }
+
+        private void OnCardDroppedInSlot(CardBase droppedcard, int numberofcardsinhand)
+        {
+            CheckIfGameOver(droppedcard, numberofcardsinhand);
+        }
 
         public static CardSlotHandCards GetHandCardSlotOfPlayer(Player player)
         {
@@ -161,11 +190,37 @@ namespace TheGameNameSpace
 
             if (!downwardCardToPlace && !upwardCardToPlace)
             {
-                return false;
                 lostTheGame = true;
+                return false;
             }
 
             return true;
+        }
+        
+        public void CheckIfGameOver(CardBase droppedCard, int numberOfCardsInHand)
+        {
+            int numberOfCardsLeft = drawnNumbers.Count;
+            
+            //check if game won
+            if (numberOfCardsInHand == 0 && numberOfCardsLeft == 0)
+            {
+                Debug.Log("Game Won!");
+                lostTheGame = false;
+                FadeItAll.FadeSceneChange("GameOverScene",Color.black, 3f);
+            }
+            
+            // check if game lost
+            else if (cardsDropped == 1 && !CanStillWinTheGame())
+            {
+                Debug.Log("Game Over!");
+//                SceneManager.LoadScene("GameOverScene");
+                FadeItAll.FadeSceneChange("GameOverScene",Color.black, 3f);
+            }
+        }
+        
+        public void LoadMainMenu()
+        {
+            FadeItAll.FadeSceneChange("MainMenuScene",Color.black, 5f);
         }
     }
 }

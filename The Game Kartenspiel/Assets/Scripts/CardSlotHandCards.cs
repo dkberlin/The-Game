@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TheGameNameSpace;
+﻿using System.Collections.Generic;
 
 public class CardSlotHandCards : CardSlotBase
 {
     public List<CardBase> currentHandCards;
-
-    public override int GetCardAmountInSlot(Transform givenTransform)
-    {
-        return base.GetCardAmountInSlot(givenTransform);
-    }
 
     internal void UpdateHandCards()
     {
