@@ -13,6 +13,7 @@ public class PlayerChoiceButton : MonoBehaviour
         {
             GameCore.numberOfHandCards = 8;
             FadeItAll.FadeSceneChange("gameScene",Color.black, 1f);
+            GameCore.numberOfPlayers = 1;
         }
 
         else

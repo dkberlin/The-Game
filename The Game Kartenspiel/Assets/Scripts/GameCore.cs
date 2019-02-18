@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TheGameNameSpace
 {
@@ -11,13 +13,13 @@ namespace TheGameNameSpace
         public CardHandler cardHandler;
         public static int numberOfHandCards;
         public static int numberOfPlayers = 1;
-        public static List<int> drawnNumbers = Enumerable.Range(2, 98).ToList();
+        public static List<int> drawnNumbers;
         public int[] savedHandCardsPlayer1;
         public int[] savedHandCardsPlayer2;
         public static int currentPlayer = 1;
         public UnityEngine.Object playerPrefab;
-        public List<GameObject> listOfPlayers;
-        public static List<GameObject> internalListOfPlayers = new List<GameObject>();
+        public List<Player> listOfPlayers;
+        public static List<Player> internalListOfPlayers = new List<Player>();
 
         public static Player player1;
         public static Player player2;
@@ -30,10 +32,14 @@ namespace TheGameNameSpace
 
         private static List<CardSlot> upwardCards;
         private static List<CardSlot> downwardCards;
+        
+        private int _initialNumberOfCards;
 
         public static ShowCurrentPlayerNumber playerNumberUIElement;
 
         public static bool lostTheGame = false;
+        
+        public TMP_Text cardsLeftText;
 
         private void OnDestroy()
         {
@@ -41,7 +47,24 @@ namespace TheGameNameSpace
             GameEvents.OnEndTurnButtonClicked -= SetupNextRound;
         }
 
-        void Start () {
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            SetupScene();
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        void SetupScene () {
+            
+            drawnNumbers = Enumerable.Range(2, 98).ToList();
             
             GameEvents.OnCardDroppedInSlot += OnCardDroppedInSlot;
             GameEvents.OnEndTurnButtonClicked += SetupNextRound;
@@ -101,10 +124,15 @@ namespace TheGameNameSpace
             }
 
             cardHandler.OnGameStart();
+            _initialNumberOfCards = drawnNumbers.Count;
+            UpdateLeftCardsText();
+            
 	    }
 
         private void SetupNextRound()
         {
+            UpdateLeftCardsText();
+            
             if (numberOfPlayers == 2)
             {
                 SetPlayerHandCardsNonVisible(currentPlayer);
@@ -118,9 +146,37 @@ namespace TheGameNameSpace
             cardsDropped = 0;
         }
 
-        private void OnCardDroppedInSlot(CardBase droppedcard, int numberofcardsinhand)
+        private void OnCardDroppedInSlot(CardBase droppedCard, int numberOfCardsInHand)
         {
-            CheckIfGameOver(droppedcard, numberofcardsinhand);
+            UpdateLeftCardsText();
+            CheckIfGameOver(droppedCard, numberOfCardsInHand);
+        }
+
+        private void UpdateLeftCardsText()
+        {
+            cardsLeftText.text = "CARDS LEFT: " + GetNumberOfCardsLeft();
+        }
+
+        private int GetNumberOfCardsLeft()
+        {
+            int numberOfCombinedHandCards = 0;
+
+            foreach (var player in listOfPlayers)
+            {
+                numberOfCombinedHandCards += player.savedHandCards.Count;
+            }
+            
+            return _initialNumberOfCards - numberOfCombinedHandCards;
+        }
+        
+        public void ResetGame()
+        {
+//            drawnNumbers.Clear();
+
+            foreach (var player in listOfPlayers)
+            {
+                player.savedHandCards.Clear();
+            }
         }
 
         public static CardSlotHandCards GetHandCardSlotOfPlayer(Player player)
@@ -153,10 +209,12 @@ namespace TheGameNameSpace
 
         public void InstantiatePlayers(int playerNumber)
         {
-            var newPlayer = Instantiate(playerPrefab) as GameObject;
+            var newPlayerGo = Instantiate(playerPrefab) as GameObject;
             
-            var playerInfo = newPlayer.GetComponent<Player>();
-            playerInfo.playerNumber = playerNumber;
+            Player newPlayer = newPlayerGo.GetComponent<Player>();
+            
+            
+            newPlayer.playerNumber = playerNumber;
 
             internalListOfPlayers.Add(newPlayer);
             listOfPlayers.Add(newPlayer);

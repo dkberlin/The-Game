@@ -14,12 +14,14 @@
           <e p="EndTurnButton.cs" t="Include" />
           <e p="EndTurnPanelController.cs" t="Include" />
           <e p="GameCore.cs" t="Include" />
+          <e p="GameEvents.cs" t="Include" />
           <e p="LoadOnEnter.cs" t="Include" />
-          <e p="MenuHelper.cs" t="Include" />
           <e p="MusicHandler.cs" t="Include" />
           <e p="Player.cs" t="Include" />
           <e p="PlayerChoiceButton.cs" t="Include" />
           <e p="ReturnToMainMenu.cs" t="Include" />
+          <e p="SettingsMenu.cs" t="Include" />
+          <e p="SettingsMenuButton.cs" t="Include" />
           <e p="ShowCurrentPlayerNumber.cs" t="Include" />
           <e p="SoundHandler.cs" t="Include" />
           <e p="WinOrLoseText.cs" t="Include" />
